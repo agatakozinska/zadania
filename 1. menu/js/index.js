@@ -2,10 +2,20 @@ var button = document.querySelector('.hamburger__button');
 var menu = document.querySelector('.menu__wrapper');
 var menuVisible = 'menu__wrapper--visible';
 
-button.addEventListener('click', () => { 
-  //sprobowac z this
+
+button.addEventListener('click', e => { 
   button.classList.toggle('hamburger__button--close');
   menu.classList.toggle(menuVisible);
+});
+
+document.addEventListener('click', e => {
+  var background = document.querySelector('.header')
+  var navBar = document.querySelector('.header__menu')
+
+  if (e.target === background || e.target === navBar ) {
+    button.classList.remove('hamburger__button--close');
+    menu.classList.remove(menuVisible);
+  }
 });
 
 var listItems = document.querySelectorAll('.nav__list__item');
