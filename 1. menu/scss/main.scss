@@ -1,6 +1,7 @@
 //COLORS:
 $black: #000;
 $white: #fff;
+$red: #f93542;
 
 //FONT-SIZES
 $size-s: 1.4rem;
@@ -19,6 +20,7 @@ html {
 html, body {
     padding: 0;
     margin: 0;
+    overflow-y: hidden;
 }
 
 a:hover,
@@ -30,11 +32,16 @@ a:link {
   color: inherit;
 }
 
+ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
 body {
   font-family: 'Open Sans', sans-serif;
   font-size: 16px;
   font-size: $size-l;
-  // overflow-y: hidden;
 }
 
 .header {
@@ -43,87 +50,144 @@ body {
   background-position: center;
 	width: 100%;
   height: 100vh;
-  max-height: 52.4rem; //spr
+  max-height: 64rem; //added for limiting background height
 }
 
 .header__wrapper {
   width: 100%;
-  height: 9.5rem; //coś tu nie pasi
+  height: 9.3rem;
   background-color: $black;
   position: relative;
   display: flex;
 }
 
 .header__logo {
-  justify-content: flex-start;
+  margin: 2.1rem 0 0 1rem;
 }
 
-.nav {
-  display: none;
-
-  &__list {
-    padding: 0;
-    color: $white;
-    font-size: $size-m;
-    font-weight: 700;
-    text-align: right;
-    list-style: none;
-  }
+.header__menu {
+  position: relative;
+  width: 100%;
 }
 
 .hamburger__button {
-  width: 35px;
-  height: 35px;
-  // background-color: transparent;
-  background-color: rgb(0, 238, 255);
-  position: relative;
-  right: 0px;
+  width: 3rem;
+  height: 3rem;
+  position: absolute;
+  right: 0;
   top: 0;
-
+  margin: 3.1rem 1rem  0 0;
 }
 
 .hamburger__bar {
-  height: 4px;
-  width: 28px;
+  height: .4rem;
+  width: 3.5rem;
   background-color: $white;
   position: absolute;
-  left: 8px;
-  top: 0px;
+  left: -2px;
+  top: 0;
 
     &--1 {
-      top: 10px;
+      top: .5rem;
     }
     &--2 {
-      top: 16px;
+      top: 1.5rem;
     }
     &--3 {
-      top: 22px;
+      top: 2.4rem;
     }
-}
-
-//menu open on mobile
-.nav--visible {
-  display: block;
-  position: fixed;
-  z-index: 9999;
-  background-color: $black;
-  width: 200px; //spr
-  height: 100%;
 }
 
 .hamburger__button--close {
+  height: 3rem;
+  width: 3rem;
+
   .hamburger__bar {
-    transition: all 0.3s ease-in-out;
+    transition: all 0.2s ease-in-out;
     
       &--1 {
-        transform: translateY(6px) rotate(45deg);
+        transform: translateY(9px) rotate(45deg);
       }
       &--2 {
         opacity: 0;
       }
       &--3 {
-        transform: translateY(-6px) rotate(-45deg);
+        transform: translateY(-10px) rotate(-45deg);
       }
   }
 }
-//
+
+.menu__wrapper {
+  position: fixed;
+  right: 0;
+  top: 9.3rem;
+  z-index: 9999;
+  background-color: $black;
+  width: 20.4rem;
+  transform: translateX(100%);
+  transition: all .5s ease;
+
+  &--visible {
+    display: block;
+    transform: translateX(0);
+  }
+}
+
+.nav__list {
+  font-size: $size-m;
+  color: $white;
+  font-weight: 700;
+  text-transform: uppercase;
+
+  &__item {
+    padding: 2.4rem 0 1.3rem 2rem;
+
+    &--active {
+      color: $red;
+    }
+  }
+}
+
+.nav__sublist {
+  display: none;
+
+  &--open {
+    display: block;
+    background: $white;
+    color: $black;
+    font-size: $size-m;
+    font-weight: 400;
+    text-transform: none;
+    box-sizing: content-box;
+    width: 100%;
+    padding: 0 2rem;
+    margin: 1.3rem 0 0 -2rem;
+    min-height: 14.2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+  }
+}
+
+.contact-info__list {
+  font-size: $size-s;
+  color: $red;
+  padding: 2.6rem 0 1.6rem 0;
+
+  &__item {
+    position: relative;
+    padding: 0 0 1rem 4.5rem;
+
+    &:nth-child(1)::before {
+      content: url(../assets/img/phone.png);
+      position: absolute;
+      left: 1.5rem;
+    }
+    &:nth-child(2)::before {
+      content: url(../assets/img/mail.png);
+      position: absolute;
+      left: 1rem;
+    }
+  }
+}
+
