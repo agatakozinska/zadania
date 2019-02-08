@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Paint App</title>
+  <link rel="stylesheet" href="main.css">
+</head>
+
+<body>
+  <main>
+    <div class="toolbar">
+
+      <div>
+        <input type="radio" name="tool" id="pencil" value="pencil">Pencil<br>
+        <input type="radio" name="tool" id="line" value="line">Line<br>
+        <input type="radio" name="tool" id="circle" value="circle">Circle<br>
+        <input type="radio" name="tool" id="rect" value="rect">Rectangle<br>
+      </div>
+      <div class="colors">
+        <button type="button" value="#0000ff"></button>
+        <button type="button" value="#ff0000"></button>
+        <button type="button" value="#ffff00"></button>
+        <input type="color" class="color-picker">
+      </div>
+      <div id="coords">(X, Y) : (0 , 0)</div>
+    </div>
+
+    <canvas id="paint" width="800" height="500"></canvas>
+
+  </main>
+
+  <script src="index.js"></script>
+</body>
+</html>
