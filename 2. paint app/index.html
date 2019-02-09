@@ -12,8 +12,7 @@
 <body>
   <main>
     <div class="toolbar">
-
-      <div>
+      <div class="tools">
         <input type="radio" name="tool" id="pencil" value="pencil">Pencil<br>
         <input type="radio" name="tool" id="line" value="line">Line<br>
         <input type="radio" name="tool" id="circle" value="circle">Circle<br>
@@ -24,6 +23,10 @@
         <button type="button" value="#ff0000"></button>
         <button type="button" value="#ffff00"></button>
         <input type="color" class="color-picker">
+      </div>
+      <div class="background">
+        <input id="background--nofill" name="fill" type="radio" value="stroke" checked>Stroke<br>
+        <input id="background--fill" name="fill" type="radio" value="fill">Fill<br>
       </div>
       <div id="coords">(X, Y) : (0 , 0)</div>
     </div>

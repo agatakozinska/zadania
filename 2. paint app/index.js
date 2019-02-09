@@ -27,7 +27,6 @@ document.addEventListener('DOMContentLoaded', function (e) {
     return pos;
   }
 
-
   canvas.addEventListener('mousedown', event => {
     drawing = true;
     let pos = getPosition(event);
@@ -73,7 +72,9 @@ document.addEventListener('DOMContentLoaded', function (e) {
     }
   }
 
-  function drawRect() {
+  function drawRect() { 
+    let getStroke = filler();
+
     if (drawing) {
       ctx.lineWidth = 1;
       let x = Math.min(endX, startX);
@@ -84,7 +85,12 @@ document.addEventListener('DOMContentLoaded', function (e) {
       if (!w || !h) {
         return;
       }
-      ctx.strokeRect(x, y, w, h);
+
+      if (getStroke) {
+        ctx.strokeRect(x, y, w, h);
+      } else {
+        ctx.fillRect(x, y, w, h);
+      }  
     }
   };
 
@@ -95,13 +101,22 @@ document.addEventListener('DOMContentLoaded', function (e) {
 
   colors.addEventListener('click', event => {
     ctx.strokeStyle = event.target.value;
+    ctx.fillStyle = event.target.value;
 
     if (colorPicker === event.target) {
       colorPicker.addEventListener('change', event => {
         ctx.strokeStyle = event.target.value;
+        ctx.fillStyle = event.target.value;
       });
     }
   });
+
+    //FILL/STORKE PICKER
+  function filler() {
+    let stroke = document.getElementById('background--nofill');
+    stroke = stroke.checked;
+    return stroke ? true : false;
+  }
 
   //TOOL PICKER
   function getTool() {
