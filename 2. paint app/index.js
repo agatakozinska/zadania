@@ -6,52 +6,82 @@ document.addEventListener('DOMContentLoaded', function(e) {
   canvas.width = (window.innerWidth - toolbarWidth) ;
   canvas.height = 500;
   
-  ctx.lineJoin = 'round';
   ctx.lineCap = 'round';
-  
-  let startX = 0;
-  let startY = 0;
-  let endX = 0;
-  let endY = 0;
-  
-  let isMouseDown = false;
-  
-  const stopDrawing = () => { isMouseDown = false; console.log('stop'); }
-  const startDrawing = e => {
-      isMouseDown = true; 
-      console.log('start');
-     [x, y] = [e.offsetX, e.offsetY];  
 
-     const coors = document.getElementById("coords");
-     coors.innerHTML = `(X, Y) : ${x} , ${y}`;
-  }
-  
-  const pencil = document.getElementById('pencil');
-  const line = document.getElementById('line');
-  
-  const draw = event => {
+	let startX = 0;
+	let startY = 0;
+	let endX = 0;
+	let endY = 0;
 
-    if ( isMouseDown && pencil.checked === true) {
-        const newX = event.offsetX;
+let drawing = false;
+
+const stopDrawing = () => { drawing = false;  }
+const getPosition = e => {
+    // console.log('start');
+   	let pos = {x: e.offsetX, y: e.offsetY}; 
+		return pos;
+}
+
+const pencil = document.getElementById('pencil');
+const line = document.getElementById('line');
+
+	
+canvas.addEventListener( 'mousedown', event => {
+drawing = true;
+	let pos = getPosition(event);
+	startX = pos.x;
+	startY = pos.y
+console.log("start (" + startX + ", " + startY + ")");
+});
+	
+canvas.addEventListener( 'mouseup', event => { 
+		let pos = getPosition(event);
+    endX = pos.x;
+    endY = pos.y;
+	
+	console.log("end (" + endX + ", " + endY + ")");
+	drawing = false;
+});	
+	
+const draw = event => {
+	let pos = getPosition(event);
+	const coors = document.getElementById("coords");
+   coors.innerHTML = `(X, Y) : ${pos.x} , ${pos.y}`;
+	
+  if ( drawing && pencil.checked === true) {
+				const newX = event.offsetX;
         const newY = event.offsetY;
         ctx.beginPath();
-        ctx.moveTo( x, y );
+        ctx.moveTo( startX, startY );
         ctx.lineTo( newX, newY );
         ctx.stroke();
-        [x, y] = [newX, newY];
-    }
-  
+        [startX, startY] = [newX, newY];	
   }
-  
-  canvas.addEventListener( 'mouseup', stopDrawing );
-  canvas.addEventListener( 'mouseout', stopDrawing );
-  canvas.addEventListener( 'mousedown', startDrawing );
-  canvas.addEventListener( 'mousemove', draw );
-  
-  
-  
-  
-  //COLOR PICKER 
+	
+	if (drawing && line.checked === true) {
+		console.log('tu jestem');
+			drawLine();
+	}
+}
+
+canvas.addEventListener( 'mousemove', draw );
+canvas.addEventListener( 'mouseout', stopDrawing );
+
+function drawLine () {
+			let x = startX;
+			let y = startY;
+			
+		console.log(`x: ${x}, y: ${y}`);
+      ctx.beginPath();
+      ctx.moveTo( startX, startY );
+      ctx.lineTo( endX, endY );
+	console.log(`end : x: ${endX}, y: ${endY}`);
+      ctx.stroke();
+	
+}
+
+
+//COLOR PICKER 
   const colors = document.getElementsByClassName('colors')[0];
   const colorPicker = document.querySelector( '.color-picker');
   
@@ -95,37 +125,6 @@ document.addEventListener('DOMContentLoaded', function(e) {
   tools.forEach((el) => {
     el.addEventListener('change', getTool)
   });
-  
-
-  
-
-  
-  
-  // tools.forEach((el) => {
-    
-  //   el.addEventListener('change', event => {
-  //     let value = event.target.value; 
-      
-  //     switch (value) {
-  //       case 'pencil':
-  //         tool.push(value);
-          
-  //         break;
-  //       case 'line':
-  //         return value;
-  //       case 'circle':
-  //         return 'halo';
-  //       case 'rect':
-  //         stopDrawing;
-  //         break;
-  //     }
-  //   });
-  // });
-  
-  
-  
-  
-  
   
   
   });
