@@ -38,10 +38,16 @@ canvas.addEventListener( 'mouseup', event => {
 		let pos = getPosition(event);
     endX = pos.x;
     endY = pos.y;
-	
-	console.log("end (" + endX + ", " + endY + ")");
+
+    getTool(); //to do!
+    drawRect();
+
+    // if (line.checked === true) {
+    //     drawLine();
+    // }
 	drawing = false;
 });	
+
 	
 const draw = event => {
 	let pos = getPosition(event);
@@ -57,28 +63,30 @@ const draw = event => {
         ctx.stroke();
         [startX, startY] = [newX, newY];	
   }
-	
-	if (drawing && line.checked === true) {
-		console.log('tu jestem');
-			drawLine();
-	}
 }
 
 canvas.addEventListener( 'mousemove', draw );
 canvas.addEventListener( 'mouseout', stopDrawing );
 
 function drawLine () {
-			let x = startX;
-			let y = startY;
-			
-		console.log(`x: ${x}, y: ${y}`);
-      ctx.beginPath();
-      ctx.moveTo( startX, startY );
-      ctx.lineTo( endX, endY );
-	console.log(`end : x: ${endX}, y: ${endY}`);
-      ctx.stroke();
-	
+  console.log('elo');
+  ctx.beginPath();
+  ctx.moveTo( startX, startY );
+  ctx.lineTo( endX, endY );
+  ctx.stroke();
 }
+
+function drawRect() {
+  let	x = Math.min(endX,  startX);
+  let	y = Math.min(endY,  startY);
+  let	w = Math.abs(endX - startX);
+  let	h = Math.abs(endY - startY);
+
+  if (!w || !h) {
+      return;
+    }
+    ctx.strokeRect(x, y, w, h);
+  };
 
 
 //COLOR PICKER 
@@ -100,31 +108,36 @@ function drawLine () {
   let tools = document.querySelectorAll('input[type=radio][name="tool"]');
   tools = [...tools];
   
-  let tool = [];
+  // let tool = [];
     
-  let getTool = () => {
-    let value = event.target.value; 
+
+  tools.forEach((el) => {
+    el.addEventListener('change', getTool)
+  });
+
+  
+ function getTool() {
+    let value = event.target.value; // z tym hest problem -> event
       
     switch (value) {
       case 'pencil':
-        draw;
+        // draw;
         console.log(value);
         break;
       case 'line':
-        stopDrawing;
+        drawLine();
         break;
       case 'circle':
         stopDrawing;
         break;
       case 'rect':
-        stopDrawing;
+        drawRect()
         break;
     }
   }
   
-  tools.forEach((el) => {
-    el.addEventListener('change', getTool)
-  });
+  
+
   
   
   });
