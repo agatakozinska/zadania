@@ -14,6 +14,7 @@ document.addEventListener('DOMContentLoaded', function (e) {
   let endY = 0;
 
   let drawing = false;
+  let getStroke = null;
 
 
   const stopDrawing = () => {
@@ -26,6 +27,7 @@ document.addEventListener('DOMContentLoaded', function (e) {
     };
     return pos;
   }
+
 
   canvas.addEventListener('mousedown', event => {
     drawing = true;
@@ -41,12 +43,22 @@ document.addEventListener('DOMContentLoaded', function (e) {
     drawing = false;
   });
 
+  
+const getCoords = () => {
+  let coords = {
+    x : Math.min(endX, startX),
+    y : Math.min(endY, startY),
+    w : Math.abs(endX - startX),
+    h : Math.abs(endY - startY),
+  }
+  return coords;
+}
 
   const draw = event => {
     let pos = getPosition(event);
     //mousemove coords -> do usuniecia 
-    const coors = document.getElementById("coords");
-    coors.innerHTML = `(X, Y) : ${pos.x} , ${pos.y}`;
+    // const coors = document.getElementById("coords");
+    // coors.innerHTML = `(X, Y) : ${pos.x} , ${pos.y}`;
 
     const pencil = document.getElementById('pencil');
     if (drawing && pencil.checked === true) {
@@ -72,25 +84,43 @@ document.addEventListener('DOMContentLoaded', function (e) {
     }
   }
 
-  function drawRect() { 
-    let getStroke = filler();
+  function drawCricle() {
+    getStroke = filler();
+    let coords = getCoords();
+
+    var center_x = coords.x + coords.w/2;
+    var center_y = coords.y + coords.h/2;
+
+    ctx.beginPath();
+    ctx.arc(center_x, center_y, coords.w/2, coords.h/2, 0, Math.PI * 2);
+    
+    if (getStroke) {
+      ctx.stroke();
+    } else {
+      ctx.fill();
+    }
+  }
+
+      
+
+
+
+  function drawRect() {
+    getStroke = filler();
+    let coords = getCoords();
 
     if (drawing) {
       ctx.lineWidth = 1;
-      let x = Math.min(endX, startX);
-      let y = Math.min(endY, startY);
-      let w = Math.abs(endX - startX);
-      let h = Math.abs(endY - startY);
 
-      if (!w || !h) {
+      if (!coords.w || !coords.h) {
         return;
       }
 
       if (getStroke) {
-        ctx.strokeRect(x, y, w, h);
+        ctx.strokeRect(coords.x, coords.y, coords.w, coords.h);
       } else {
-        ctx.fillRect(x, y, w, h);
-      }  
+        ctx.fillRect(coords.x, coords.y, coords.w, coords.h);
+      }
     }
   };
 
@@ -111,7 +141,7 @@ document.addEventListener('DOMContentLoaded', function (e) {
     }
   });
 
-    //FILL/STORKE PICKER
+  //FILL/STORKE PICKER
   function filler() {
     let stroke = document.getElementById('background--nofill');
     stroke = stroke.checked;
