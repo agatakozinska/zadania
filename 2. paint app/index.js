@@ -55,6 +55,9 @@ document.addEventListener('DOMContentLoaded', function (e) {
     return coords;
   }
 
+  let draws = [];
+
+
   const draw = event => {
     let pos = getPosition(event);
     //mousemove coords -> do usuniecia 
@@ -64,20 +67,27 @@ document.addEventListener('DOMContentLoaded', function (e) {
     const pencil = document.getElementById('pencil');
     if (drawing && pencil.checked === true) {
       ctx.lineWidth = 3;
-      const newX = event.offsetX;
-      const newY = event.offsetY;
+      let newX = event.offsetX;
+      let newY = event.offsetY;
       ctx.beginPath();
       ctx.moveTo(startX, startY);
       ctx.lineTo(newX, newY);
       ctx.stroke();
+      console.log(newY)
+      draws.push({
+        name: 'pencil',
+        color: ctx.strokeStyle,
+        startX, startY, newX, newY
+      });
       [startX, startY] = [newX, newY];
+
     }
   }
 
   canvas.addEventListener('mousemove', draw);
   canvas.addEventListener('mouseout', stopDrawing);
 
-  let draws = [];
+  
 
   function drawLine() {
     if (drawing) {
@@ -85,6 +95,11 @@ document.addEventListener('DOMContentLoaded', function (e) {
       ctx.moveTo(startX, startY);
       ctx.lineTo(endX, endY);
       ctx.stroke();
+      draws.push({
+        name: 'line',
+        color: ctx.strokeStyle,
+        startX, startY, endX, endY
+      });
     }
   }
 
@@ -114,25 +129,21 @@ document.addEventListener('DOMContentLoaded', function (e) {
     ctx.arc(args.x, args.y, args.r, args.start, args.end);
 
     if (getStroke) {
-      // ctx.arc(args.x, args.y, args.r, args.start, args.end);
       ctx.stroke();
       draws.push({
         name: 'strokeCirc',
         color: ctx.strokeStyle,
         ...args
-      }); console.log(draws);
+      });
     } else {
-      // ctx.arc(args.x, args.y, args.r, args.start, args.end);
       ctx.fill();
       draws.push({
         name: 'fillCirc',
         color: ctx.fillStyle,
         ...args
-      }); console.log(draws);
+      });
     }
   }
-
- 
 
   function drawRect() {
     getStroke = filler();
@@ -189,6 +200,21 @@ document.addEventListener('DOMContentLoaded', function (e) {
           ctx.fillStyle = draw.color;
           ctx.fill();
         }
+      }
+      if (draw.name === 'line') {
+        ctx.strokeStyle = draw.color;
+        ctx.beginPath();
+        ctx.moveTo(draw.startX, draw.startY);
+        ctx.lineTo(draw.endX, draw.endY);
+        ctx.stroke();
+      }
+      if (draw.name === 'pencil') {
+        console.log(draw);
+        ctx.strokeStyle = draw.color;
+        ctx.beginPath();
+        ctx.moveTo(draw.startX, draw.startY);
+        ctx.lineTo(draw.newX, draw.newY);
+        ctx.stroke();
       }
     });
   }
