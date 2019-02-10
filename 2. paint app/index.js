@@ -77,6 +77,8 @@ document.addEventListener('DOMContentLoaded', function (e) {
   canvas.addEventListener('mousemove', draw);
   canvas.addEventListener('mouseout', stopDrawing);
 
+  let draws = [];
+
   function drawLine() {
     if (drawing) {
       ctx.beginPath();
@@ -89,23 +91,48 @@ document.addEventListener('DOMContentLoaded', function (e) {
   function drawCricle() {
     getStroke = filler();
     let coords = getCoords();
+
+    if (!coords.w || !coords.h) {
+      return;
+    }
+
     const halfWidth = coords.w / 2;
     const halfHeight = coords.h / 2
     const radius = Math.ceil(Math.sqrt(Math.pow(halfWidth, 2) + Math.pow(halfHeight, 2)));
     const centerX = coords.x + halfWidth;
     const centerY = coords.y + halfHeight;
 
+    let args = {
+      x: centerX,
+      y: centerY,
+      r: radius,
+      start: 0,
+      end: Math.PI * 2
+    }
+
     ctx.beginPath();
-    ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
+    ctx.arc(args.x, args.y, args.r, args.start, args.end);
 
     if (getStroke) {
+      // ctx.arc(args.x, args.y, args.r, args.start, args.end);
       ctx.stroke();
+      draws.push({
+        name: 'strokeCirc',
+        color: ctx.strokeStyle,
+        ...args
+      }); console.log(draws);
     } else {
+      // ctx.arc(args.x, args.y, args.r, args.start, args.end);
       ctx.fill();
+      draws.push({
+        name: 'fillCirc',
+        color: ctx.fillStyle,
+        ...args
+      }); console.log(draws);
     }
   }
 
-  let draws = [];
+ 
 
   function drawRect() {
     getStroke = filler();
@@ -151,6 +178,18 @@ document.addEventListener('DOMContentLoaded', function (e) {
         ctx.fillStyle = draw.color;
         ctx.fillRect(draw.x, draw.y, draw.w, draw.h);
       }
+      if (draw.name === 'strokeCirc' || draw.name === 'fillCirc' ) {
+        ctx.beginPath();
+        ctx.arc(draw.x, draw.y, draw.r, draw.start, draw.end);
+
+        if (draw.name === 'strokeCirc') {
+          ctx.strokeStyle = draw.color;
+          ctx.stroke();
+        } else {
+          ctx.fillStyle = draw.color;
+          ctx.fill();
+        }
+      }
     });
   }
 
@@ -158,6 +197,7 @@ document.addEventListener('DOMContentLoaded', function (e) {
   const undoButton = document.querySelector('.button--undo');
   undoButton.addEventListener('click', event => {
     draws.pop();
+    console.log('undo' + draws);
     replayActions(draws, true);
   });
 
