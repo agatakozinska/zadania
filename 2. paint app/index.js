@@ -41,18 +41,19 @@ document.addEventListener('DOMContentLoaded', function (e) {
 
     getTool();
     drawing = false;
+
   });
 
-  
-const getCoords = () => {
-  let coords = {
-    x : Math.min(endX, startX),
-    y : Math.min(endY, startY),
-    w : Math.abs(endX - startX),
-    h : Math.abs(endY - startY),
+
+  const getCoords = () => {
+    let coords = {
+      x: Math.min(endX, startX),
+      y: Math.min(endY, startY),
+      w: Math.abs(endX - startX),
+      h: Math.abs(endY - startY),
+    }
+    return coords;
   }
-  return coords;
-}
 
   const draw = event => {
     let pos = getPosition(event);
@@ -62,6 +63,7 @@ const getCoords = () => {
 
     const pencil = document.getElementById('pencil');
     if (drawing && pencil.checked === true) {
+      ctx.lineWidth = 3;
       const newX = event.offsetX;
       const newY = event.offsetY;
       ctx.beginPath();
@@ -87,13 +89,12 @@ const getCoords = () => {
   function drawCricle() {
     getStroke = filler();
     let coords = getCoords();
-
-    var center_x = coords.x + coords.w/2;
-    var center_y = coords.y + coords.h/2;
+    const centerX = coords.x + coords.w / 2;
+    const centerY = coords.y + coords.h / 2;
 
     ctx.beginPath();
-    ctx.arc(center_x, center_y, coords.w/2, coords.h/2, 0, Math.PI * 2);
-    
+    ctx.arc(centerX, centerY, coords.w / 2, coords.h / 2, 0, Math.PI * 2);
+
     if (getStroke) {
       ctx.stroke();
     } else {
@@ -101,9 +102,7 @@ const getCoords = () => {
     }
   }
 
-      
-
-
+  let draws = [];
 
   function drawRect() {
     getStroke = filler();
@@ -118,11 +117,46 @@ const getCoords = () => {
 
       if (getStroke) {
         ctx.strokeRect(coords.x, coords.y, coords.w, coords.h);
+        draws.push({
+          name: 'strokeRect',
+          color: ctx.strokeStyle,
+          ...coords
+        });
       } else {
         ctx.fillRect(coords.x, coords.y, coords.w, coords.h);
+        draws.push({
+          name: 'fillRect',
+          color: ctx.fillStyle,
+          ...coords
+        });
       }
     }
   };
+
+
+  function replayActions(draws, clearCanvas) {
+    if (clearCanvas) {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }
+
+    draws.forEach(function (draw) {
+      if (draw.name === 'strokeRect') {
+        ctx.strokeStyle = draw.color;
+        ctx.strokeRect(draw.x, draw.y, draw.w, draw.h);
+      }
+      if (draw.name === 'fillRect') {
+        ctx.fillStyle = draw.color;
+        ctx.fillRect(draw.x, draw.y, draw.w, draw.h);
+      }
+    });
+  }
+
+  //UNDO ACTION
+  const undoButton = document.querySelector('.button--undo');
+  undoButton.addEventListener('click', event => {
+    draws.pop();
+    replayActions(draws, true);
+  });
 
 
   //COLOR PICKER 
