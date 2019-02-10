@@ -89,11 +89,14 @@ document.addEventListener('DOMContentLoaded', function (e) {
   function drawCricle() {
     getStroke = filler();
     let coords = getCoords();
-    const centerX = coords.x + coords.w / 2;
-    const centerY = coords.y + coords.h / 2;
+    const halfWidth = coords.w / 2;
+    const halfHeight = coords.h / 2
+    const radius = Math.ceil(Math.sqrt(Math.pow(halfWidth, 2) + Math.pow(halfHeight, 2)));
+    const centerX = coords.x + halfWidth;
+    const centerY = coords.y + halfHeight;
 
     ctx.beginPath();
-    ctx.arc(centerX, centerY, coords.w / 2, coords.h / 2, 0, Math.PI * 2);
+    ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
 
     if (getStroke) {
       ctx.stroke();
