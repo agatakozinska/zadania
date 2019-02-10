@@ -12,30 +12,36 @@
 <body>
   <main>
     <div class="toolbar">
-      <div class="tools">
+      <div class="container tools">
+        <div class="container__title">Tools</div>
         <input type="radio" name="tool" id="pencil" value="pencil">Pencil<br>
         <input type="radio" name="tool" id="line" value="line">Line<br>
         <input type="radio" name="tool" id="circle" value="circle">Circle<br>
         <input type="radio" name="tool" id="rect" value="rect">Rectangle<br>
       </div>
-      <div class="colors">
+      <div class="container background">
+          <div class="container__title">Type</div>
+          <input id="background--nofill" name="fill" type="radio" value="stroke" checked>Stroke<br>
+          <input id="background--fill" name="fill" type="radio" value="fill">Fill<br>
+        </div>
+      <div class="container colors">
+        <div class="container__title">Colors</div>
         <button type="button" value="#0000ff"></button>
         <button type="button" value="#ff0000"></button>
         <button type="button" value="#ffff00"></button>
+        <button type="button" value="#00ff00"></button>
+        <div class="container__subtitle">Color picker</div>
         <input type="color" class="color-picker">
       </div>
-      <div class="background">
-        <input id="background--nofill" name="fill" type="radio" value="stroke" checked>Stroke<br>
-        <input id="background--fill" name="fill" type="radio" value="fill">Fill<br>
-      </div>
-      <div id="coords">(X, Y) : (0 , 0)</div>
-      <button class="button--undo">Undo</button>
+      <div class="button">
+      <button class="button-action button--undo">Undo</button>
+      <button class="button-action button--clear">Clear</button>
+    </div>
     </div>
 
     <canvas id="paint" width="800" height="500"></canvas>
 
   </main>
-
   <script src="index.js"></script>
 </body>
 </html>

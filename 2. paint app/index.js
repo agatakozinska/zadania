@@ -41,7 +41,6 @@ document.addEventListener('DOMContentLoaded', function (e) {
 
     getTool();
     drawing = false;
-
   });
 
 
@@ -55,29 +54,27 @@ document.addEventListener('DOMContentLoaded', function (e) {
     return coords;
   }
 
+  //array for shapes
   let draws = [];
-
 
   const draw = event => {
     let pos = getPosition(event);
-    //mousemove coords -> do usuniecia 
-    // const coors = document.getElementById("coords");
-    // coors.innerHTML = `(X, Y) : ${pos.x} , ${pos.y}`;
 
     const pencil = document.getElementById('pencil');
     if (drawing && pencil.checked === true) {
-      ctx.lineWidth = 3;
       let newX = event.offsetX;
       let newY = event.offsetY;
       ctx.beginPath();
       ctx.moveTo(startX, startY);
       ctx.lineTo(newX, newY);
       ctx.stroke();
-      console.log(newY)
       draws.push({
         name: 'pencil',
         color: ctx.strokeStyle,
-        startX, startY, newX, newY
+        startX,
+        startY,
+        newX,
+        newY
       });
       [startX, startY] = [newX, newY];
 
@@ -87,7 +84,6 @@ document.addEventListener('DOMContentLoaded', function (e) {
   canvas.addEventListener('mousemove', draw);
   canvas.addEventListener('mouseout', stopDrawing);
 
-  
 
   function drawLine() {
     if (drawing) {
@@ -98,7 +94,10 @@ document.addEventListener('DOMContentLoaded', function (e) {
       draws.push({
         name: 'line',
         color: ctx.strokeStyle,
-        startX, startY, endX, endY
+        startX,
+        startY,
+        endX,
+        endY
       });
     }
   }
@@ -150,7 +149,6 @@ document.addEventListener('DOMContentLoaded', function (e) {
     let coords = getCoords();
 
     if (drawing) {
-      ctx.lineWidth = 1;
 
       if (!coords.w || !coords.h) {
         return;
@@ -181,40 +179,42 @@ document.addEventListener('DOMContentLoaded', function (e) {
     }
 
     draws.forEach(function (draw) {
-      if (draw.name === 'strokeRect') {
-        ctx.strokeStyle = draw.color;
-        ctx.strokeRect(draw.x, draw.y, draw.w, draw.h);
-      }
-      if (draw.name === 'fillRect') {
-        ctx.fillStyle = draw.color;
-        ctx.fillRect(draw.x, draw.y, draw.w, draw.h);
-      }
-      if (draw.name === 'strokeCirc' || draw.name === 'fillCirc' ) {
-        ctx.beginPath();
-        ctx.arc(draw.x, draw.y, draw.r, draw.start, draw.end);
-
-        if (draw.name === 'strokeCirc') {
+      switch (draw.name) {
+        case ('strokeRect'):
+          ctx.strokeStyle = draw.color;
+          ctx.strokeRect(draw.x, draw.y, draw.w, draw.h);
+          break;
+        case ('fillRect'):
+          ctx.fillStyle = draw.color;
+          ctx.fillRect(draw.x, draw.y, draw.w, draw.h);
+          break;
+        case ('strokeCirc'):
+          ctx.strokeStyle = draw.color;
+          ctx.beginPath();
+          ctx.arc(draw.x, draw.y, draw.r, draw.start, draw.end);
           ctx.strokeStyle = draw.color;
           ctx.stroke();
-        } else {
+          break;
+        case ('fillCirc'):
+          ctx.beginPath();
+          ctx.arc(draw.x, draw.y, draw.r, draw.start, draw.end);
           ctx.fillStyle = draw.color;
           ctx.fill();
-        }
-      }
-      if (draw.name === 'line') {
-        ctx.strokeStyle = draw.color;
-        ctx.beginPath();
-        ctx.moveTo(draw.startX, draw.startY);
-        ctx.lineTo(draw.endX, draw.endY);
-        ctx.stroke();
-      }
-      if (draw.name === 'pencil') {
-        console.log(draw);
-        ctx.strokeStyle = draw.color;
-        ctx.beginPath();
-        ctx.moveTo(draw.startX, draw.startY);
-        ctx.lineTo(draw.newX, draw.newY);
-        ctx.stroke();
+          break;
+        case ('line'):
+          ctx.strokeStyle = draw.color;
+          ctx.beginPath();
+          ctx.moveTo(draw.startX, draw.startY);
+          ctx.lineTo(draw.endX, draw.endY);
+          ctx.stroke();
+          break;
+        case ('pencil'):
+          ctx.strokeStyle = draw.color;
+          ctx.beginPath();
+          ctx.moveTo(draw.startX, draw.startY);
+          ctx.lineTo(draw.newX, draw.newY);
+          ctx.stroke();
+          break;
       }
     });
   }
@@ -223,8 +223,13 @@ document.addEventListener('DOMContentLoaded', function (e) {
   const undoButton = document.querySelector('.button--undo');
   undoButton.addEventListener('click', event => {
     draws.pop();
-    console.log('undo' + draws);
     replayActions(draws, true);
+  });
+
+  //CLEAR ACTION
+  const clearButton = document.querySelector('.button--clear');
+  clearButton.addEventListener('click', event => {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
   });
 
 
@@ -262,13 +267,20 @@ document.addEventListener('DOMContentLoaded', function (e) {
       return;
     }
 
-    if (circle.checked === true) {
+    else if (circle.checked === true) {
       drawCricle();
       return;
     }
 
-    if (rect.checked === true) {
+    else if (rect.checked === true) {
       drawRect();
+      return;
+    }
+    else if (pencil.checked === true) {
+      return;
+    }
+    else {
+      alert('Please choose your tool to draw');
       return;
     }
   }
