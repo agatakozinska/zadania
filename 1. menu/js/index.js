@@ -8,8 +8,13 @@ const firstItem = listItems[0];
 const sublist = document.querySelector('.nav__sublist');
 const sublistOpen = 'nav__sublist--open';
 
+let isMenuOpen = false;
+
 button.addEventListener('click', () => {
+  isMenuOpen = !isMenuOpen;
+
   button.classList.toggle(buttonClose);
+  button.setAttribute('aria-expanded', String(isMenuOpen));
   menu.classList.toggle(menuVisible);
 
   if (!(button.classList.contains(buttonClose))) {
