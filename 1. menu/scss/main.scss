@@ -17,10 +17,11 @@ html {
   font-size: 62.5%;
 }
 
-html, body {
-    padding: 0;
-    margin: 0;
-    overflow-y: auto;
+html,
+body {
+  padding: 0;
+  margin: 0;
+  overflow-y: auto;
 }
 
 a:hover,
@@ -38,6 +39,10 @@ ul {
   list-style: none;
 }
 
+ul:focus, nav:focus {
+    outline: 0;
+}
+
 body {
   font-family: 'Open Sans', sans-serif;
   font-size: 16px;
@@ -48,7 +53,7 @@ body {
   background: url(../assets/img/KV.jpg) no-repeat;
   background-size: cover;
   background-position: center;
-	width: 100%;
+  width: 100%;
   height: 100vh;
   max-height: 64rem; //added for limiting background height
 }
@@ -81,7 +86,7 @@ body {
   position: absolute;
   right: 0;
   top: 0;
-  margin: 1.2rem 1rem  0 0;
+  margin: 1.2rem 1rem 0 0;
 }
 
 .hamburger__bar {
@@ -92,15 +97,17 @@ body {
   left: -2px;
   top: 0;
 
-    &--1 {
-      top: .5rem;
-    }
-    &--2 {
-      top: 1.5rem;
-    }
-    &--3 {
-      top: 2.4rem;
-    }
+  &--1 {
+    top: .5rem;
+  }
+
+  &--2 {
+    top: 1.5rem;
+  }
+
+  &--3 {
+    top: 2.4rem;
+  }
 }
 
 .hamburger__button--close {
@@ -109,16 +116,18 @@ body {
 
   .hamburger__bar {
     transition: all 0.2s ease-in-out;
-    
-      &--1 {
-        transform: translateY(9px) rotate(45deg);
-      }
-      &--2 {
-        opacity: 0;
-      }
-      &--3 {
-        transform: translateY(-10px) rotate(-45deg);
-      }
+
+    &--1 {
+      transform: translateY(9px) rotate(45deg);
+    }
+
+    &--2 {
+      opacity: 0;
+    }
+
+    &--3 {
+      transform: translateY(-10px) rotate(-45deg);
+    }
   }
 }
 
@@ -172,8 +181,8 @@ body {
   }
 
   &--open {
-    margin: 1.3rem 0 0 -2rem;
     min-height: 14.2rem;
+    margin: 1.3rem 0 0 -2rem;
     padding: 0 2rem;
     background: $white;
 
@@ -197,6 +206,7 @@ body {
       position: absolute;
       left: 1.5rem;
     }
+
     &:nth-child(2)::before {
       content: url(../assets/img/mail.png);
       position: absolute;
@@ -209,6 +219,7 @@ body {
   .hamburger__button {
     display: none;
   }
+
   .header__menu {
     display: flex;
     justify-content: flex-end;
@@ -226,12 +237,65 @@ body {
     transform: translateX(0);
   }
 
-  .nav__list, .contact-info__list {
+  .nav__list,
+  .contact-info__list {
     display: flex;
   }
 
   .nav__list {
     justify-content: space-between;
+  }
+
+  .nav__sublist {
+    box-sizing: border-box;
+    position: absolute;
+    left: 1rem;
+    width: 12.8rem;
+  }
+
+  .nav__list__item:first-child:hover {
+    color: $red;
+    position: relative;
+
+    .nav__sublist {
+      transition: min-height .5s;
+      min-height: 14.2rem;
+      margin: 1.3rem 0 0 -2rem;
+      padding: 0 2rem;
+      background: $white;
+
+      &::before,
+      .nav__sublist--open {
+        content: '';
+        position: absolute;
+        top: -.4rem;
+        left: 0;
+        background-color: $red;
+        width: 100%;
+        height: .4rem;
+      }
+
+      &__item {
+        display: block;
+      }
+    }
+  }
+
+  .nav__list__item {
+    cursor: pointer;
+
+    :hover {
+      color: $red;
+    }
+  }
+
+  .nav__list__item>.nav__sublist {
+    color: $black;
+  }
+
+  .nav__sublist__item:hover {
+    cursor: pointer;
+    color: $red;
   }
 
   .contact-info__list {
@@ -245,30 +309,4 @@ body {
       margin-left: 1rem;
     }
   }
-
-  .nav__sublist {
-    box-sizing: border-box;
-    position: absolute;
-    left: 1rem;
-    width: 12.8rem;
-
-    &--open::before {
-      content: '';
-      position: absolute;
-      top: -.4rem;
-      left: 0;
-      background-color: $red;
-      width: 100%;
-      height: .4rem;
-    }
-  }
-
-  .nav__list__item, .nav__sublist__item {
-    cursor: pointer;
-
-    :hover {
-      color: $red;
-    }
-  }
 }
-

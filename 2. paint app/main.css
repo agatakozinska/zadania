@@ -1,6 +1,7 @@
 :root {
   --blue: #0000ff;
   --red: #ff0000;
+  --redish: #fe194f;
   --yellow: #ffff00;
   --green: #00ff00;
   --light-green: #63c252;
@@ -11,6 +12,7 @@
 }
 
 * {
+  -webkit-box-sizing: border-box;
   box-sizing: border-box;
 }
 
@@ -25,12 +27,18 @@ main {
   font-family: Arial;
   border: 1px solid var(--light-gray);
   margin: 0 auto;
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
 }
 
 input {
   cursor: pointer;
+  width: 14px;
+  height: 14px;
+  margin: 7px 5px 0 0;
 }
+
 
 .toolbar {
   width: 200px;
@@ -106,7 +114,7 @@ input {
   text-align: center;
   width: 100%;
   padding-right: 10px;
-  margin: 50px auto 0 auto;
+  margin: 30px auto 0 auto;
 }
 .button-action {
   cursor: pointer;
@@ -122,5 +130,4 @@ input {
   border-radius: 10px;
   width: 80px;
   padding: 10px;
-
 }
